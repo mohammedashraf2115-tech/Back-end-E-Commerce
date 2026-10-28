@@ -1,0 +1,305 @@
+{
+  "info": {
+    "name": "E-Commerce REST API (Full System)",
+    "description": "Production-ready Postman collection with seeded accounts, active tokens, and full CRUD flows.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000/api/v1"
+    },
+    {
+      "key": "admin_token",
+      "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2YWRmNTRmNmE1ZGM5YWI0MmU5NmE4OWIiLCJyb2xlIjoiYWRtaW4iLCJuYW1lIjoiU3RvcmUgQWRtaW4iLCJpYXQiOjE3OTMwMjExNzUsImV4cCI6MTc5MzYyNTk3NX0.n10voLCKCrFI9laBdJBvXG6Kb-MeTgWlykoAgahEZsE"
+    },
+    {
+      "key": "user_token",
+      "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2YWRmNTRmNmE1ZGM5YWI0MmU5NmE4OWMiLCJyb2xlIjoidXNlciIsIm5hbWUiOiJBaG1lZCBIYXNzYW4iLCJpYXQiOjE3OTMwMjExNzUsImV4cCI6MTc5MzYyNTk3NX0.wuUSi4lYc-uB5zRNvgcCKUp1nNlS-rZqK2uuFvJjMgE"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Authentication",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test Customer\",\n  \"email\": \"customer@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/auth/register" }
+          }
+        },
+        {
+          "name": "Login (Customer)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"ahmed@gmail.com\",\n  \"password\": \"user123456\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/auth/login" }
+          }
+        },
+        {
+          "name": "Login (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@store.com\",\n  \"password\": \"admin123456\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/auth/login" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. User & Addresses",
+      "item": [
+        {
+          "name": "Get Profile (Me)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "{{user_token}}" }],
+            "url": { "raw": "{{base_url}}/user/me" }
+          }
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "{{user_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Ahmed H. Updated\",\n  \"mobile\": \"01199998888\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/user/update-me" }
+          }
+        },
+        {
+          "name": "Add Address",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "{{user_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Gym\",\n  \"street\": \"10 Abbas El Akkad\",\n  \"city\": \"Cairo\",\n  \"isDefault\": false\n}"
+            },
+            "url": { "raw": "{{base_url}}/user/addresses" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Products & Categories (Public)",
+      "item": [
+        {
+          "name": "Get All Products",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/product" }
+          }
+        },
+        {
+          "name": "Search & Filter Products",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/product?search=shirt&minPrice=200&maxPrice=600&page=1&limit=5" }
+          }
+        },
+        {
+          "name": "Get Product by Slug",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/product/classic-white-cotton-tshirt" }
+          }
+        },
+        {
+          "name": "Get All Categories",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/category" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Cart Operations",
+      "item": [
+        {
+          "name": "Get Cart (with Price Change Check)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "{{user_token}}" }],
+            "url": { "raw": "{{base_url}}/cart" }
+          }
+        },
+        {
+          "name": "Add to Cart",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "{{user_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"<PASTE_PRODUCT_ID>\",\n  \"quantity\": 2\n}"
+            },
+            "url": { "raw": "{{base_url}}/cart/items" }
+          }
+        },
+        {
+          "name": "Merge Guest Cart (Post-Login)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "{{user_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"items\": [\n    { \"productId\": \"<PASTE_PRODUCT_ID>\", \"quantity\": 1 }\n  ]\n}"
+            },
+            "url": { "raw": "{{base_url}}/cart/merge" }
+          }
+        },
+        {
+          "name": "Clear Cart",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "{{user_token}}" }],
+            "url": { "raw": "{{base_url}}/cart" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Orders & Transactions",
+      "item": [
+        {
+          "name": "Place Order (COD & Atomic Stock Check)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "{{user_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mobile\": \"01122223333\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/order" }
+          }
+        },
+        {
+          "name": "My Orders",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "{{user_token}}" }],
+            "url": { "raw": "{{base_url}}/order/my-orders" }
+          }
+        },
+        {
+          "name": "Cancel Order (Client)",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Authorization", "value": "{{user_token}}" }],
+            "url": { "raw": "{{base_url}}/order/<PASTE_ORDER_ID>/cancel" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Admin Dashboard & Controls",
+      "item": [
+        {
+          "name": "Dashboard Stats (Alerts & Revenue)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "{{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/dashboard/stats" }
+          }
+        },
+        {
+          "name": "Admin - Get All Orders",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "{{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/order" }
+          }
+        },
+        {
+          "name": "Admin - Update Order Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "{{admin_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"shipped\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/order/<PASTE_ORDER_ID>/status" }
+          }
+        },
+        {
+          "name": "Admin - Create New Admin",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "{{admin_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Operations Admin\",\n  \"email\": \"ops@store.com\",\n  \"password\": \"admin123456\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/user/create-admin" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Static Pages & FAQs & Testimonials",
+      "item": [
+        {
+          "name": "Get FAQ List",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/faq" }
+          }
+        },
+        {
+          "name": "Get Testimonials",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/testimonial" }
+          }
+        },
+        {
+          "name": "Get Page (Policies)",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/page/policies" }
+          }
+        }
+      ]
+    }
+  ]
+}
+
